@@ -1,0 +1,1 @@
+encode_data=pd.DataFrame(encode_array,columns=feature.columns)
