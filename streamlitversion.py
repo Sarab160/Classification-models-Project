@@ -9,9 +9,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.ensemble import VotingClassifier, BaggingClassifier, RandomForestClassifier
 
-# --------------------------
-# Load dataset
-# --------------------------
+
 df = pd.read_csv("network_traffic.csv")
 
 # Encode label
