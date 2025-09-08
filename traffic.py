@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from sklearn.ensemble import VotingClassifier
+from sklearn.ensemble import VotingClassifier,BaggingClassifier,RandomForestClassifier
 
 df=pd.read_csv("network_traffic.csv")
 
@@ -39,45 +39,35 @@ ss=StandardScaler()
 X_s=ss.fit_transform(X_final)
 x_train,x_test,y_train,y_test=train_test_split(X_s,y,test_size=0.2,random_state=42)
 
-# knc=KNeighborsClassifier(n_neighbors=30)
-# knc.fit(x_train,y_train)
+knc=KNeighborsClassifier(n_neighbors=30)
+knc.fit(x_train,y_train)
 
-# print(knc.score(x_test,y_test))
+print(knc.score(x_test,y_test))
 
-# param_grid = {
-#     'n_neighbors': [3, 5, 7, 9, 11, 15, 21],
-#     'weights': ['uniform', 'distance'],
-#     'metric': ['euclidean', 'manhattan', 'minkowski'],
-#     'p': [1, 2]  # relevant only if metric='minkowski'
-# }
 
-# gd=GridSearchCV(estimator=KNeighborsClassifier(),param_grid=param_grid)
-# gd.fit(x_train,y_train)
 
-# print(gd.best_score_)
+pe=PolynomialFeatures(degree=1)
+x_pe=pe.fit_transform(X_s)
+x_train1,x_test1,y_train1,y_test1=train_test_split(x_pe,y,test_size=0.3,random_state=42)
+lr=LogisticRegression()
+lr.fit(x_train1,y_train1)
 
-# pe=PolynomialFeatures(degree=1)
-# x_pe=pe.fit_transform(X_s)
-# x_train1,x_test1,y_train1,y_test1=train_test_split(x_pe,y,test_size=0.3,random_state=42)
-# lr=LogisticRegression()
-# lr.fit(x_train1,y_train1)
+print(lr.score(x_test1,y_test1))
 
-# print(lr.score(x_test1,y_test1))
+dtc=DecisionTreeClassifier(max_depth=5)
+dtc.fit(x_train,y_train)
 
-# dtc=DecisionTreeClassifier(max_depth=5)
-# dtc.fit(x_train,y_train)
+print(dtc.score(x_test,y_test))
 
-# print(dtc.score(x_test,y_test))
+gnb=GaussianNB()
+gnb.fit(x_train,y_train)
 
-# gnb=GaussianNB()
-# gnb.fit(x_train,y_train)
+print(gnb.score(x_test,y_test))
 
-# print(gnb.score(x_test,y_test))
+svc=SVC(kernel="poly")
+svc.fit(x_train,y_train)
 
-# svc=SVC(kernel="poly")
-# svc.fit(x_train,y_train)
-
-# print(svc.score(x_test,y_test))
+print(svc.score(x_test,y_test))
 
 models = [
     ('dtc', DecisionTreeClassifier()),
@@ -89,3 +79,13 @@ voting=VotingClassifier(estimators=models)
 voting.fit(x_train,y_train)
 
 print(voting.score(x_test,y_test))
+
+bgc=BaggingClassifier(estimator=SVC(),n_estimators=20)
+bgc.fit(x_train,y_train)
+
+print(bgc.score(x_test,y_test))
+
+rf=RandomForestClassifier(n_estimators=20)
+rf.fit(x_train,y_train)
+
+print(rf.score(x_test,y_test))
