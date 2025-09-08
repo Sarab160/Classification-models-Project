@@ -7,6 +7,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.ensemble import VotingClassifier
 
 df=pd.read_csv("network_traffic.csv")
 
@@ -62,12 +64,28 @@ x_train,x_test,y_train,y_test=train_test_split(X_s,y,test_size=0.2,random_state=
 
 # print(lr.score(x_test1,y_test1))
 
-dtc=DecisionTreeClassifier(max_depth=5)
-dtc.fit(x_train,y_train)
+# dtc=DecisionTreeClassifier(max_depth=5)
+# dtc.fit(x_train,y_train)
 
-print(dtc.score(x_test,y_test))
+# print(dtc.score(x_test,y_test))
 
-gnb=GaussianNB()
-gnb.fit(x_train,y_train)
+# gnb=GaussianNB()
+# gnb.fit(x_train,y_train)
 
-print(gnb.score(x_test,y_test))
+# print(gnb.score(x_test,y_test))
+
+# svc=SVC(kernel="poly")
+# svc.fit(x_train,y_train)
+
+# print(svc.score(x_test,y_test))
+
+models = [
+    ('dtc', DecisionTreeClassifier()),
+    ('gnb', GaussianNB()),
+    ('knn', KNeighborsClassifier()),
+    ('svc',SVC())]
+
+voting=VotingClassifier(estimators=models)
+voting.fit(x_train,y_train)
+
+print(voting.score(x_test,y_test))
