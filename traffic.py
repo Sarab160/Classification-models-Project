@@ -62,8 +62,12 @@ x_train,x_test,y_train,y_test=train_test_split(X_s,y,test_size=0.2,random_state=
 
 # print(lr.score(x_test1,y_test1))
 
-# dtc=DecisionTreeClassifier(max_depth=5)
-# dtc.fit(x_train,y_train)
+dtc=DecisionTreeClassifier(max_depth=5)
+dtc.fit(x_train,y_train)
 
-# print(dtc.score(x_test,y_test))
+print(dtc.score(x_test,y_test))
 
+gnb=GaussianNB()
+gnb.fit(x_train,y_train)
+
+print(gnb.score(x_test,y_test))
